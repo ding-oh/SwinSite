@@ -1,0 +1,6 @@
+*.ckpt
+*.egg-info
+*.log
+.ipynb_checkpoints/
+*.png
+*.png

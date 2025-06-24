@@ -1,0 +1,17 @@
+name: swinsite
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pytorch
+  - pytorch-cuda=12.4
+  - torchaudio
+  - torchvision
+  - openblas-devel
+  - openbabel
+  - matplotlib
+  - py3dmol
+  - einops
+  - scikit-image
+  - scikit-learn
