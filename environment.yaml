@@ -15,3 +15,4 @@ dependencies:
   - einops
   - scikit-image
   - scikit-learn
+  - h5py
