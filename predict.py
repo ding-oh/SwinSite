@@ -27,7 +27,7 @@ from utils import (
     save_molecule_files
 )
 
-def main(input_dir, file_format="mol2", model_paths=None, output_root="./output", log_path="./logs/log.txt", use_ensemble=True):
+def main(input_dir, file_format="pdb", output_format="mol2", model_paths=None, output_root="./output", log_path="./logs/log.txt", use_ensemble=True):
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
     log_file = open(log_path, "w")
     log_file.write("==== Prediction Log Start ====\n\n")
@@ -97,8 +97,8 @@ def main(input_dir, file_format="mol2", model_paths=None, output_root="./output"
             os.makedirs(folder_name, exist_ok=True)
 
             try:
-                save_molecule_files(folder_name, pockets, "pocket", binding_score, file_format)
-                save_molecule_files(folder_name, pocket_grids, "grid", binding_score, file_format)
+                save_molecule_files(folder_name, pockets, "pocket", binding_score, output_format)
+                save_molecule_files(folder_name, pocket_grids, "grid", binding_score, output_format)
             except Exception as e:
                 error_msg = f"[ERROR] Failed to save molecule files for {name}: {e}\n"
                 print(error_msg)
@@ -123,7 +123,8 @@ def main(input_dir, file_format="mol2", model_paths=None, output_root="./output"
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Protein Pocket Prediction")
     parser.add_argument("-i", "--input_dir", required=True, help="Path to input folder")
-    parser.add_argument("-f", "--file_format", default="mol2", help="File format (default: mol2)")
+    parser.add_argument("-f", "--file_format", default="pdb", help="Input file format (default: pdb)")
+    parser.add_argument("-of", "--output_format", default="mol2", help="Output file format (default: mol2)")
     parser.add_argument("-m", "--model_paths", nargs='+', default=[
         "./model/fold_1/best_epoch.h5",
         "./model/fold_2/best_epoch.h5",
@@ -138,6 +139,7 @@ if __name__ == "__main__":
     main(
         input_dir=args.input_dir,
         file_format=args.file_format,
+        output_format=args.output_format,
         model_paths=args.model_paths,
         output_root=args.output_root,
         log_path=args.log_path,

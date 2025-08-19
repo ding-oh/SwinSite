@@ -6,11 +6,20 @@
 
 ## Installation
 
-Create and activate the conda environment:
+### 1. Create conda environment and install PyTorch
 
 ```bash
-conda env create -f environment.yaml
+conda create -n swinsite python=3.12
 conda activate swinsite
+
+# Install PyTorch with CUDA support
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
+
+### 2. Install additional dependencies
+
+```bash
+pip install openbabel-wheel matplotlib py3dmol einops scikit-image scikit-learn h5py tqdm timm
 ```
 
 ---
@@ -24,7 +33,6 @@ Run the prediction script on a set of protein–ligand complexes:
 ```bash
 python predict.py \
     -i ./example \
-    -f mol2 \
     -o ./output/example \
     -l ./logs/log.txt
 ```
@@ -32,7 +40,7 @@ python predict.py \
 **Arguments**:
 
 - `-i` : Path to input directory (should contain subdirectories with `protein.pdb` and `ligand.mol2`)
-- `-f` : File format (`mol2` or `pdb`)
+- `-f` : File format (default: `pdb`, optional: `mol2`)
 - `-o` : Output directory
 - `-l` : Log file path
 
