@@ -15,9 +15,6 @@ from scipy import ndimage
 # Disable openbabel error logging.
 pybel.ob.obErrorLog.StopLogging()
 
-#############################################
-# Featurizer 클래스: 원자 기반 피처 추출 구현
-#############################################
 class Featurizer():
     def __init__(self, atom_codes=None, atom_labels=None,
                  named_properties=None, save_molecule_codes=True,
@@ -205,10 +202,6 @@ class Featurizer():
         featurizer.compile_smarts()
         return featurizer
 
-#############################################
-# proteinDataset 클래스: Training/Evaluation용 데이터셋
-# - 원자 좌표를 격자로 바꾸는 과정에 Gaussian smoothing 옵션 포함
-#############################################
 class proteinDataset(Dataset):
     def __init__(self, data_path, featurizer=Featurizer(save_molecule_codes=False),
                  max_dist=35, eval=True, scale=1, max_translation=5, kfold_ind=0,
