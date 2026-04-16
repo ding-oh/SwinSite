@@ -98,8 +98,6 @@ For each processed sample, the following files will be generated:
 
 ## Citation
 
-If you use SwinSite in your research, please cite:
-
 ```bibtex
 @article{kim2026swinsite,
   title={SwinSite: 3D Structure-Based Prediction of Protein--Ligand Binding Sites Using a Combined Vision Transformer and Convolution Model},
