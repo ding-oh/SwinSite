@@ -95,3 +95,20 @@ For each processed sample, the following files will be generated:
 - `log.txt`       : Log file containing progress and error messages
 
 ---
+
+## Citation
+
+If you use SwinSite in your research, please cite:
+
+```bibtex
+@article{kim2026swinsite,
+  title={SwinSite: 3D Structure-Based Prediction of Protein--Ligand Binding Sites Using a Combined Vision Transformer and Convolution Model},
+  author={Kim, Dongwoo and Lee, Juyong},
+  journal={Journal of Chemical Information and Modeling},
+  volume={66},
+  number={5},
+  pages={2551--2559},
+  year={2026},
+  doi={10.1021/acs.jcim.5c02734}
+}
+```

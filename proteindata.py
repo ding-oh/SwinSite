@@ -15,6 +15,9 @@ from scipy import ndimage
 # Disable openbabel error logging.
 pybel.ob.obErrorLog.StopLogging()
 
+#############################################
+# Featurizer: atom-level feature extraction
+#############################################
 class Featurizer():
     def __init__(self, atom_codes=None, atom_labels=None,
                  named_properties=None, save_molecule_codes=True,
@@ -74,7 +77,7 @@ class Featurizer():
                     raise ValueError('named_properties must be in pybel.Atom attributes, %s was given at position %s' % (prop, prop_id))
             self.NAMED_PROPS = named_properties
         else:
-            # 기본적으로 사용할 pybel.Atom 속성
+            # default pybel.Atom properties
             self.NAMED_PROPS = ['hyb', 'heavydegree', 'heterodegree', 'partialcharge']
         self.FEATURE_NAMES += self.NAMED_PROPS
 
@@ -202,6 +205,10 @@ class Featurizer():
         featurizer.compile_smarts()
         return featurizer
 
+#############################################
+# proteinDataset: Training/Evaluation dataset
+# - voxelizes atom coordinates to 3D grid with optional Gaussian smoothing
+#############################################
 class proteinDataset(Dataset):
     def __init__(self, data_path, featurizer=Featurizer(save_molecule_codes=False),
                  max_dist=35, eval=True, scale=1, max_translation=5, kfold_ind=0,
@@ -212,8 +219,8 @@ class proteinDataset(Dataset):
         self.max_translation = max_translation
         self.eval = eval
         self.featurizer = featurizer
-        self.use_gaussian = use_gaussian   # Gaussian smoothing 사용 여부
-        self.sigma = sigma                 # Gaussian 표준편차 (예: grid_resolution=1.0일 때 1.0 Å)
+        self.use_gaussian = use_gaussian
+        self.sigma = sigma
         self.data_list = sorted([os.path.join(self.data_path, x) for x in os.listdir(self.data_path)])
         self.eval_num = int(len(self.data_list) / 4)
         footprint = ellipsoid(2, 2, 2)
@@ -246,8 +253,8 @@ class proteinDataset(Dataset):
         rot = choice(range(24))
         tr = self.max_translation * np.random.rand(1, 3)
         x, y = self.feed_data(mol1, mol2, rot, tr)
-        x = torch.Tensor(x.astype(np.float32)).permute(3, 0, 1, 2)
-        y = torch.Tensor(y.astype(np.float32)).permute(3, 0, 1, 2)
+        x = torch.from_numpy(x.astype(np.float32)).permute(3, 0, 1, 2)
+        y = torch.from_numpy(y.astype(np.float32)).permute(3, 0, 1, 2)
         return x, y
 
     def gaussian_weight(self, distance, sigma):
@@ -425,7 +432,7 @@ class proteinDataset_predict(Dataset):
         mol_path = os.path.join(self.data_list[index], 'protein.' + self.file_format)
         mol1 = self.protein_list[index]
         x, origin, step = self.feed_data(mol1)
-        x = torch.Tensor(x.astype(np.float32)).permute(3, 0, 1, 2)
+        x = torch.from_numpy(x.astype(np.float32)).permute(3, 0, 1, 2)
         return x, origin, step, molname, mol_path
 
     def gaussian_weight(self, distance, sigma):
